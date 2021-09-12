@@ -86,7 +86,7 @@ static inline void remove_hook(void* func){
 }
 
 static HMODULE (WINAPI *load_library_w_orig)(LPCWSTR);
-static HMODULE WINAPI load_library_w(LPCWSTR lib_filename){
+static HMODULE WINAPI load_library_w(LPCWSTR lib_filename)try{
 	if(lib_filename == L"cri_ware_unity.dll"sv){
 		consume_tasks();
 
@@ -95,6 +95,9 @@ static HMODULE WINAPI load_library_w(LPCWSTR lib_filename){
 		return ::LoadLibraryW(lib_filename);
 	}
 	return load_library_w_orig(lib_filename);
+}catch(std::exception& e){
+	::MessageBoxA(nullptr, e.what(), "Symboli Prelude exception at hooked LoadLibraryW", MB_OK|MB_ICONERROR|MB_SETFOREGROUND);
+	return nullptr;
 }
 
 static inline will::expected<void> create_console(const TCHAR* console_title)try{
@@ -126,7 +129,7 @@ static inline BOOL process_attach(HINSTANCE hinst){
 		config_file >> j;
 		config = j.get<config_t>();
 	}catch(std::exception& e){
-		::MessageBoxA(nullptr, e.what(), "Symboli Prelude exception", MB_OK|MB_ICONWARNING|MB_SETFOREGROUND);
+		::MessageBoxA(nullptr, e.what(), "Symboli Prelude exception at read config", MB_OK|MB_ICONWARNING|MB_SETFOREGROUND);
 	}
 
 	if(config.enable_console)
