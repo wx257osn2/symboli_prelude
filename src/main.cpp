@@ -90,7 +90,7 @@ static HMODULE WINAPI load_library_w(LPCWSTR lib_filename){
 	return load_library_w_orig(lib_filename);
 }
 
-will::expected<void> create_console(const TCHAR* console_title)try{
+static inline will::expected<void> create_console(const TCHAR* console_title)try{
 	if(!will::console::attach(ATTACH_PARENT_PROCESS))
 		will::console::alloc().value();
 	will::console::bind_stdstreams().value();
