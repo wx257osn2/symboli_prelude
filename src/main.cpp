@@ -122,9 +122,8 @@ static inline BOOL process_attach(HINSTANCE hinst){
 		::MessageBoxA(nullptr, e.what(), "Symboli Prelude exception", MB_OK|MB_ICONWARNING|MB_SETFOREGROUND);
 	}
 
-	if(config.enable_console){
+	if(config.enable_console)
 		create_console(_T("Symboli console")).value();
-	}
 	return TRUE;
 }
 
