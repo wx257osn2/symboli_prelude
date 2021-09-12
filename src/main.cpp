@@ -14,21 +14,6 @@ using namespace std::literals::string_view_literals;
 
 static std::pair<std::vector<std::function<void()>>, std::mutex> entries;
 
-void __declspec(dllexport) enqueue_task(std::function<void()> f){
-	const std::lock_guard<std::mutex> lock{entries.second};
-	entries.first.emplace_back(std::move(f));
-}
-
-static inline void consume_tasks(){
-	const std::lock_guard<std::mutex> lock{entries.second};
-	for(auto&& x : entries.first)try{
-		x();
-	}catch(std::exception& e){
-		::MessageBoxA(nullptr, e.what(), "Symboli Prelude exception", MB_OK|MB_ICONWARNING|MB_SETFOREGROUND);
-	}
-	entries.first.clear();
-}
-
 struct config_t{
 	bool enable_console;
 }static config = {
@@ -58,6 +43,28 @@ static inline std::string to_string(::MH_STATUS stat){
 	case ::MH_ERROR_FUNCTION_NOT_FOUND: return "The specified function is not found.";
 	default: return "Unknown error.";
 	}
+}
+
+extern "C" void __declspec(dllexport) diagnostic(const char* module_name, const char* message) {
+	if(config.enable_console)
+		std::clog << '[' << module_name << "]: " << message << std::endl;
+	else
+		::MessageBoxA(nullptr, message, module_name, MB_OK|MB_ICONWARNING|MB_SETFOREGROUND);
+}
+
+void __declspec(dllexport) enqueue_task(std::function<void()> f){
+	const std::lock_guard<std::mutex> lock{entries.second};
+	entries.first.emplace_back(std::move(f));
+}
+
+static inline void consume_tasks(){
+	const std::lock_guard<std::mutex> lock{entries.second};
+	for(auto&& x : entries.first)try{
+		x();
+	}catch(std::exception& e){
+		diagnostic("Symboli Prelude :: consume_tasks()", e.what());
+	}
+	entries.first.clear();
 }
 
 void __declspec(dllexport) hook(void* target, void* detour, void** original){

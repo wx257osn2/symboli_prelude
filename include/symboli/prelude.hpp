@@ -6,9 +6,10 @@
 namespace symboli{
 
 struct prelude : will::module_handle{
-	prelude(will::module_handle&& mod, void (*enqueue_task)(std::function<void()>), void (*hook)(void*, void*, void**)) : will::module_handle{std::move(mod)}, enqueue_task_{enqueue_task}, hook_{hook}{}
+	prelude(will::module_handle&& mod, void (*enqueue_task)(std::function<void()>), void (*hook)(void*, void*, void**), void (*diagnostic)(const char*, const char*)) : will::module_handle{std::move(mod)}, enqueue_task_{enqueue_task}, hook_{hook}, diagnostic_{diagnostic}{}
 	void (*enqueue_task_)(std::function<void()>);
 	void (*hook_)(void*, void*, void**);
+	void (*diagnostic_)(const char*, const char*);
 public:
 	prelude(prelude&&) = default;
 	prelude& operator=(prelude&&) = default;
@@ -22,7 +23,10 @@ public:
 		const auto hook = module->get_proc_address<void(void*, void*, void**)>("?hook@@YAXPEAX0PEAPEAX@Z");
 		if(!hook)
 			return will::make_unexpected(hook.error());
-		return prelude{std::move(*module), *enqueue_task, *hook};
+		const auto diagnostic = module->get_proc_address<void(const char*, const char*)>("diagnostic");
+		if(!diagnostic)
+			return will::make_unexpected(diagnostic.error());
+		return prelude{std::move(*module), *enqueue_task, *hook, *diagnostic};
 	}
 	template<typename T, typename U>
 	will::expected<void> hook(U* f)const try{
@@ -35,6 +39,10 @@ public:
 
 	void enqueue_task(std::function<void()> f)const{
 		enqueue_task_(std::move(f));
+	}
+
+	void diagnostic(const char* module, const char* message)const{
+		diagnostic_(module, message);
 	}
 };
 
