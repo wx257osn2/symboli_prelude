@@ -16,3 +16,5 @@ MSBuild -p:Configuration=Release
 ## License
 
 MIT
+
+This project contains some files from [MinHook](https://github.com/TsudaKageyu/minhook). MinHook is licensed under the [BSD 2-Clause license](https://github.com/TsudaKageyu/minhook/blob/master/LICENSE.txt).

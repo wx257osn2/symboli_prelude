@@ -46,12 +46,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(SolutionDir).vs\$(ProjectName)\intermediate\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir).dependencies\symboli_hook\include;$(SolutionDir).dependencies\will\include;$(SolutionDir).dependencies\nlohmann_json\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir).dependencies\minhook\include;$(SolutionDir).dependencies\will\include;$(SolutionDir).dependencies\nlohmann_json\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir).vs\lib\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IntDir>$(SolutionDir).vs\$(ProjectName)\intermediate\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir).dependencies\symboli_hook\include;$(SolutionDir).dependencies\will\include;$(SolutionDir).dependencies\nlohmann_json\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir).dependencies\minhook\include;$(SolutionDir).dependencies\will\include;$(SolutionDir).dependencies\nlohmann_json\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir).vs\lib\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

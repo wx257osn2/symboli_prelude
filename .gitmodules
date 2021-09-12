@@ -1,9 +1,9 @@
-[submodule ".dependencies/symboli_hook"]
-	path = .dependencies/symboli_hook
-	url = https://github.com/wx257osn2/symboli_hook
 [submodule ".dependencies/will/include/will"]
 	path = .dependencies/will/include/will
 	url = https://github.com/wx257osn2/will
 [submodule ".dependencies/nlohmann_json"]
 	path = .dependencies/nlohmann_json
 	url = https://github.com/nlohmann/json
+[submodule ".dependencies/minhook"]
+	path = .dependencies/minhook
+	url = https://github.com/TsudaKageyu/minhook
