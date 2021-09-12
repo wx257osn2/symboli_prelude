@@ -44,6 +44,16 @@ public:
 	void diagnostic(const char* module, const char* message)const{
 		diagnostic_(module, message);
 	}
+
+	template<bool Opt, typename J, typename T>
+	void config_read(const char* diagnostic_module, const J& j, const typename J::object_t::key_type& key, T& t)try{
+		if constexpr(Opt)
+			if(!j.contains(key))
+				return;
+		j.at(key).get_to(t);
+	}catch(std::exception& e){
+		diagnostic(diagnostic_module, e.what());
+	}
 };
 
 template<typename, typename>
