@@ -120,7 +120,7 @@ static inline BOOL process_attach(HINSTANCE hinst){
 
 	const std::filesystem::path plugin_path{will::get_module_file_name(hinst).value()};
 
-	std::ifstream config_file{plugin_path.parent_path()/"symboli_prelude.config"};
+	std::ifstream config_file{(plugin_path.parent_path()/plugin_path.stem()).concat(".config.json")};
 	if(config_file.is_open())try{
 		nlohmann::json j;
 		config_file >> j;
