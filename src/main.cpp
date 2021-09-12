@@ -19,9 +19,6 @@ struct config_t{
 }static config = {
 	.enable_console = false
 };
-static inline void to_json(nlohmann::json& j, const config_t& conf){
-	j = nlohmann::json{{"enable_console", conf.enable_console}};
-}
 static inline void from_json(const nlohmann::json& j, config_t& conf){
 	j.at("enable_console").get_to(conf.enable_console);
 }
