@@ -6,7 +6,7 @@
 
 namespace symboli{
 
-struct prelude : will::module_handle{
+class prelude : will::module_handle{
 	prelude(will::module_handle&& mod, void (*enqueue_task)(std::function<void()>), void (*hook)(void*, void*, void**), void (*diagnostic)(const char*, const char*), unsigned int major_version, unsigned int minor_version, unsigned int patch_version) : will::module_handle{std::move(mod)}, enqueue_task_{enqueue_task}, hook_{hook}, diagnostic_{diagnostic}, major_version_{major_version}, minor_version_{minor_version}, patch_version_{patch_version}{}
 	void (*enqueue_task_)(std::function<void()>);
 	void (*hook_)(void*, void*, void**);
