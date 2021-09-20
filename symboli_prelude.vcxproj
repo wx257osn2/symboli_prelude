@@ -48,12 +48,14 @@
     <IntDir>$(SolutionDir).vs\$(ProjectName)\intermediate\$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir).dependencies\minhook\include;$(SolutionDir).dependencies\will\include;$(SolutionDir).dependencies\nlohmann_json\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir).vs\lib\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <OutDir>$(SolutionDir).vs\$(ProjectName)\out\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IntDir>$(SolutionDir).vs\$(ProjectName)\intermediate\$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir).dependencies\minhook\include;$(SolutionDir).dependencies\will\include;$(SolutionDir).dependencies\nlohmann_json\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir).vs\lib\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <OutDir>$(SolutionDir).vs\$(ProjectName)\out\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -67,6 +69,11 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>mkdir $(SolutionDir)bin
+copy $(OutDirFullPath)$(TargetFileName) $(SolutionDir)$(BaseOutputPath)
+if not exist $(SolutionDir)$(BaseOutputPath)$(TargetName).config.json copy $(SolutionDir)$(TargetName).config.json.sample $(SolutionDir)$(BaseOutputPath)$(TargetName).config.json</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -84,6 +91,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>mkdir $(SolutionDir)bin
+copy $(OutDirFullPath)$(TargetFileName) $(SolutionDir)$(BaseOutputPath)
+if not exist $(SolutionDir)$(BaseOutputPath)$(TargetName).config.json copy $(SolutionDir)$(TargetName).config.json.sample $(SolutionDir)$(BaseOutputPath)$(TargetName).config.json</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
