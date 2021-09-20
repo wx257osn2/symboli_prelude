@@ -42,7 +42,7 @@ static inline std::string to_string(::MH_STATUS stat){
 	}
 }
 
-extern "C" void __declspec(dllexport) diagnostic(const char* module_name, const char* message) {
+extern "C" void __declspec(dllexport) diagnostic(const char* module_name, const char* message){
 	if(config.enable_console)
 		std::clog << '[' << module_name << "]: " << message << std::endl;
 	else
