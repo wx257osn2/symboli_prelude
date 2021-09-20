@@ -8,7 +8,20 @@
 #include<mutex>
 #include<MinHook.h>
 #include<functional>
+#include"symboli/prelude_version.hpp"
 #pragma comment(lib, "minhook.x64.lib")
+
+extern "C" int __declspec(dllexport) major_version(){
+	return SYMBOLI_PRELUDE_EXPECTED_VERSION_MAJOR;
+}
+
+extern "C" int __declspec(dllexport) minor_version(){
+	return SYMBOLI_PRELUDE_EXPECTED_VERSION_MINOR;
+}
+
+extern "C" int __declspec(dllexport) patch_version(){
+	return SYMBOLI_PRELUDE_EXPECTED_VERSION_PATCH;
+}
 
 using namespace std::literals::string_view_literals;
 
