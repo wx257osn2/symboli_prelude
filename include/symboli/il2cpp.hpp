@@ -212,6 +212,7 @@ public:
 		SYMBOLI_IL2CPP_MODULE_RESOLVE_IMPORT(void*(void*, std::uintptr_t), array_new)
 		SYMBOLI_IL2CPP_MODULE_RESOLVE_IMPORT(void*(void*), thread_attach)
 		SYMBOLI_IL2CPP_MODULE_RESOLVE_IMPORT(void(void*), thread_detach)
+#undef  SYMBOLI_IL2CPP_MODULE_RESOLVE_IMPORT
 		return module{
 			*string_new_utf16,
 			*string_new,
