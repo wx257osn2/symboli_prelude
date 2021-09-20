@@ -301,35 +301,35 @@ struct get_class : detail::utility_operator<get_class>{
 	}
 };
 
-struct get_method : detail::utility_operator<get_method>{
+struct get_method_info : detail::utility_operator<get_method_info>{
 	const char* assembly_name;
 	const char* namespaze;
 	const char* klass_name;
 	const char* name;
 	int args_count;
-	constexpr explicit get_method(const char* assembly_name, const char* namespaze, const char* klass_name, const char* name, int args_count)noexcept:assembly_name{assembly_name}, namespaze{namespaze}, klass_name{klass_name}, name{name}, args_count{args_count}{}
-	constexpr get_method(const get_method&)noexcept = default;
-	constexpr get_method(get_method&&)noexcept = default;
+	constexpr explicit get_method_info(const char* assembly_name, const char* namespaze, const char* klass_name, const char* name, int args_count)noexcept:assembly_name{assembly_name}, namespaze{namespaze}, klass_name{klass_name}, name{name}, args_count{args_count}{}
+	constexpr get_method_info(const get_method_info&)noexcept = default;
+	constexpr get_method_info(get_method_info&&)noexcept = default;
 	data_type::MethodInfo* operator()(const module& il2cpp)const{
 		auto klass = il2cpp->*get_class(assembly_name, namespaze, klass_name);
 		return il2cpp.class_get_method_from_name(klass, name, args_count);
 	}
 };
 
-struct get_methods : detail::utility_operator<get_methods>{
+struct get_method_infos : detail::utility_operator<get_method_infos>{
 	const char* assembly_name;
 	const char* namespaze;
 	const char* klass_name;
-	constexpr explicit get_methods(const char* assembly_name, const char* namespaze, const char* klass_name)noexcept:assembly_name{assembly_name}, namespaze{namespaze}, klass_name{klass_name}{}
-	constexpr get_methods(const get_methods&)noexcept = default;
-	constexpr get_methods(get_methods&&)noexcept = default;
+	constexpr explicit get_method_infos(const char* assembly_name, const char* namespaze, const char* klass_name)noexcept:assembly_name{assembly_name}, namespaze{namespaze}, klass_name{klass_name}{}
+	constexpr get_method_infos(const get_method_infos&)noexcept = default;
+	constexpr get_method_infos(get_method_infos&&)noexcept = default;
 	class iterator{
 		const data_type::MethodInfo* method = nullptr;
 		module::klass* klass;
 		void* iter;
 		const module* il2cpp;
 		iterator(const data_type::MethodInfo* method, module::klass* klass, void* iter, const module& il2cpp)noexcept:method{method}, klass{klass}, iter{iter}, il2cpp{&il2cpp}{}
-		friend get_methods;
+		friend get_method_infos;
 	public:
 		using value_type = const data_type::MethodInfo*;
 		using difference_type = std::ptrdiff_t;
