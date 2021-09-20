@@ -382,4 +382,20 @@ struct get_method_infos : detail::utility_operator<get_method_infos>{
 	}
 };
 
+template<typename F>
+struct attached_thread : detail::utility_operator<attached_thread<F>>{
+	F f;
+	template<typename G>
+	constexpr explicit attached_thread(G&& g) : f{std::forward<G>(g)}{}
+	std::thread operator()(const module& il2cpp)const{
+		return std::thread{[il2cpp, f]{
+			auto deleter = [&](module::thread* ptr){il2cpp.thread_detach(ptr);};
+			std::unique_ptr<module::thread, decltype(deleter)> tr{il2cpp.thread_attach(il2cpp.domain_get()), deleter};
+			f();
+		}};
+	}
+};
+template<typename F>
+attached_thread(F&&) -> attached_thread<std::remove_cvref_t<F>>;
+
 }
