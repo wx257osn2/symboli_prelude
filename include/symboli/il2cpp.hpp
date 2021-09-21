@@ -326,11 +326,12 @@ struct get_method<R(Args...)> : detail::utility_operator<get_method<R(Args...)>>
 	const char* namespaze;
 	const char* klass_name;
 	const char* name;
-	constexpr explicit get_method(const char* assembly_name, const char* namespaze, const char* klass_name, const char* name)noexcept:assembly_name{assembly_name}, namespaze{namespaze}, klass_name{klass_name}, name{name}{}
+	int args_count;
+	constexpr explicit get_method(const char* assembly_name, const char* namespaze, const char* klass_name, const char* name, int args_count = static_cast<int>(sizeof...(Args)))noexcept :assembly_name{assembly_name}, namespaze{namespaze}, klass_name{klass_name}, name{name}, args_count{args_count}{}
 	constexpr get_method(const get_method&)noexcept = default;
 	constexpr get_method(get_method&&)noexcept = default;
 	R (*operator()(const module& il2cpp)const)(Args...){
-		return reinterpret_cast<R(*)(Args...)>((il2cpp->*get_method_info{assembly_name, namespaze, klass_name, name, static_cast<int>(sizeof...(Args))})->methodPointer);
+		return reinterpret_cast<R(*)(Args...)>((il2cpp->*get_method_info{assembly_name, namespaze, klass_name, name, args_count})->methodPointer);
 	}
 };
 
