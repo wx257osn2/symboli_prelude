@@ -389,7 +389,7 @@ struct attached_thread : detail::utility_operator<attached_thread<F>>{
 	template<typename G>
 	constexpr explicit attached_thread(G&& g) : f{std::forward<G>(g)}{}
 	std::thread operator()(const module& il2cpp)const{
-		return std::thread{[il2cpp, f]{
+		return std::thread{[il2cpp, f=this->f]{
 			auto deleter = [&](module::thread* ptr){il2cpp.thread_detach(ptr);};
 			std::unique_ptr<module::thread, decltype(deleter)> tr{il2cpp.thread_attach(il2cpp.domain_get()), deleter};
 			f();
