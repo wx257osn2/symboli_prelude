@@ -39,13 +39,13 @@ public:
 		const auto diagnostic = module->get_proc_address<void(const char*, const char*)>("diagnostic");
 		if(!diagnostic)
 			return will::make_unexpected(diagnostic.error());
-		const auto major_version = module->get_proc_address<int()>("major_version");
+		const auto major_version = module->get_proc_address<unsigned int()>("major_version");
 		if(!major_version)
 			return will::make_unexpected(major_version.error());
-		const auto minor_version = module->get_proc_address<int()>("minor_version");
+		const auto minor_version = module->get_proc_address<unsigned int()>("minor_version");
 		if(!minor_version)
 			return will::make_unexpected(minor_version.error());
-		const auto patch_version = module->get_proc_address<int()>("patch_version");
+		const auto patch_version = module->get_proc_address<unsigned int()>("patch_version");
 		if(!patch_version)
 			return will::make_unexpected(patch_version.error());
 		const unsigned int major = (*major_version)();
