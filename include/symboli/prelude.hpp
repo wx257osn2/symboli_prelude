@@ -14,16 +14,16 @@ class prelude : will::module_handle{
 	unsigned int major_version_;
 	unsigned int minor_version_;
 	unsigned int patch_version_;
-	static bool version_check(unsigned int major, unsigned int minor, unsigned int patch){
-		if(major != SYMBOLI_PRELUDE_EXPECTED_VERSION_MAJOR)
+public:
+	static bool version_check(unsigned int major, unsigned int minor, unsigned int patch, unsigned int expected_major, unsigned int expected_minor, unsigned int expected_patch){
+		if(major != expected_major)
 			return false;
-		if(minor < SYMBOLI_PRELUDE_EXPECTED_VERSION_MINOR)
+		if(minor < expected_minor)
 			return false;
-		if(minor == SYMBOLI_PRELUDE_EXPECTED_VERSION_MINOR && patch < SYMBOLI_PRELUDE_EXPECTED_VERSION_PATCH)
+		if(minor == expected_minor && patch < expected_patch)
 			return false;
 		return true;
 	}
-public:
 	prelude(prelude&&) = default;
 	prelude& operator=(prelude&&) = default;
 	static will::expected<prelude, will::winapi_last_error> create(const std::filesystem::path& dll_path = "symboli_prelude.dll"){
@@ -51,7 +51,7 @@ public:
 		const unsigned int major = (*major_version)();
 		const unsigned int minor = (*minor_version)();
 		const unsigned int patch = (*patch_version)();
-		if(!version_check(major, minor, patch))
+		if(!version_check(major, minor, patch, SYMBOLI_PRELUDE_EXPECTED_VERSION_MAJOR, SYMBOLI_PRELUDE_EXPECTED_VERSION_MINOR, SYMBOLI_PRELUDE_EXPECTED_VERSION_PATCH))
 			return will::make_unexpected<will::winapi_last_error>(_T("symboli::prelude::version_check"), PEERDIST_ERROR_VERSION_UNSUPPORTED);
 		return prelude{std::move(*module), *enqueue_task, *hook, *diagnostic, major, minor, patch};
 	}
