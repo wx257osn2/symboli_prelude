@@ -83,7 +83,7 @@ public:
 	}
 
 	template<bool Opt, typename J, typename T>
-	void config_read(const char* diagnostic_module, const J& j, const typename J::object_t::key_type& key, T& t)try{
+	void config_read(const char* diagnostic_module, const J& j, const typename J::object_t::key_type& key, T& t)const try{
 		if constexpr(Opt)
 			if(!j.contains(key))
 				return;
