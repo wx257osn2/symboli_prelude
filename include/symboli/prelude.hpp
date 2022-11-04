@@ -57,7 +57,7 @@ public:
 	}
 	template<typename T, typename U>
 	will::expected<void> hook(U* f)const try{
-		static_assert(std::is_same<T::func_type, U>::value);
+		static_assert(std::is_same<T::template func_type, U>::value);
 		hook_(static_cast<void*>(f), static_cast<void*>(&T::func), &reinterpret_cast<void*&>(T::original_proc));
 		return {};
 	}catch(...){
