@@ -235,6 +235,9 @@ public:
 	data_type::Il2CppString* string_new_utf16(const wchar_t* str, unsigned int length)const{
 		return string_new_utf16_(str, length);
 	}
+	data_type::Il2CppString* string_new_utf16(std::wstring_view str)const{
+		return string_new_utf16_(str.data(), static_cast<unsigned int>(str.size()));
+	}
 	data_type::Il2CppString* string_new(const char* str)const{
 		return string_new_(str);
 	}
@@ -262,8 +265,12 @@ public:
 	void* object_new(klass* klass)const{
 		return object_new_(static_cast<void*>(klass));
 	}
-	void* resolve_icall(const char* name)const{
+	[[deprecated("You should pass template parameter")]] void* resolve_icall(const char* name)const{
 		return resolve_icall_(name);
+	}
+	template<typename T>
+	T* resolve_icall(const char* name)const{
+		return reinterpret_cast<T*>(resolve_icall_(name));
 	}
 	void* array_new(klass* klass, std::uintptr_t count)const{
 		return array_new_(static_cast<void*>(klass), count);
