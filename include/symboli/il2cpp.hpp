@@ -41,6 +41,7 @@ struct TextGenerationSettings{
 
 }
 
+struct IEnumerable{};
 struct Resolution{int width, height, herz;};
 struct Il2CppString{
 	void* Empty;
@@ -324,23 +325,67 @@ struct get_method_info : detail::utility_operator<get_method_info>{
 	}
 };
 
+namespace detail{
+
 template<typename T>
-struct get_method;
+struct get_method0_impl;
 
 template<typename R, typename... Args>
-struct get_method<R(Args...)> : detail::utility_operator<get_method<R(Args...)>>{
+struct get_method0_impl<R(Args...)> : detail::utility_operator<get_method0_impl<R(Args...)>>{
 	const char* assembly_name;
 	const char* namespaze;
 	const char* klass_name;
 	const char* name;
 	int args_count;
-	constexpr explicit get_method(const char* assembly_name, const char* namespaze, const char* klass_name, const char* name, int args_count = static_cast<int>(sizeof...(Args)))noexcept :assembly_name{assembly_name}, namespaze{namespaze}, klass_name{klass_name}, name{name}, args_count{args_count}{}
-	constexpr get_method(const get_method&)noexcept = default;
-	constexpr get_method(get_method&&)noexcept = default;
+	constexpr explicit get_method0_impl(const char* assembly_name, const char* namespaze, const char* klass_name, const char* name, int args_count = static_cast<int>(sizeof...(Args)))noexcept:assembly_name{assembly_name}, namespaze{namespaze}, klass_name{klass_name}, name{name}, args_count{args_count}{}
+	constexpr get_method0_impl(const get_method0_impl&)noexcept = default;
+	constexpr get_method0_impl(get_method0_impl&&)noexcept = default;
 	R (*operator()(const module& il2cpp)const)(Args...){
 		return reinterpret_cast<R(*)(Args...)>((il2cpp->*get_method_info{assembly_name, namespaze, klass_name, name, args_count})->methodPointer);
 	}
 };
+
+}
+
+template<typename T>
+static constexpr detail::get_method0_impl<T> get_method(const char* assembly_name, const char* namespaze, const char* klass_name, const char* name){
+	return detail::get_method0_impl<T>{assembly_name, namespaze, klass_name, name};
+}
+
+template<typename T>
+static constexpr detail::get_method0_impl<T> get_method(const char* assembly_name, const char* namespaze, const char* klass_name, const char* name, int args_count){
+	return detail::get_method0_impl<T>{assembly_name, namespaze, klass_name, name, args_count};
+}
+
+namespace detail{
+
+template<typename T>
+struct get_method1_impl;
+
+template<typename R, typename... Args>
+struct get_method1_impl<R(Args...)> : detail::utility_operator<get_method1_impl<R(Args...)>>{
+	module::klass* klass;
+	const char* name;
+	int args_count;
+	constexpr explicit get_method1_impl(module::klass* klass, const char* name, int args_count = static_cast<int>(sizeof...(Args)))noexcept:klass{klass}, name{name}, args_count{args_count}{}
+	constexpr get_method1_impl(const get_method1_impl&)noexcept = default;
+	constexpr get_method1_impl(get_method1_impl&&)noexcept = default;
+	R (*operator()(const module& il2cpp)const)(Args...){
+		return reinterpret_cast<R(*)(Args...)>((il2cpp.class_get_method_from_name(klass, name, args_count))->methodPointer);
+	}
+};
+
+}
+
+template<typename T>
+static constexpr detail::get_method1_impl<T> get_method(module::klass* klass, const char* name){
+	return detail::get_method1_impl<T>{klass, name};
+}
+
+template<typename T>
+static constexpr detail::get_method1_impl<T> get_method(module::klass* klass, const char* name, int args_count){
+	return detail::get_method1_impl<T>{klass, name, args_count};
+}
 
 struct get_method_infos : detail::utility_operator<get_method_infos>{
 	const char* assembly_name;
@@ -405,5 +450,67 @@ struct attached_thread : detail::utility_operator<attached_thread<F>>{
 };
 template<typename F>
 attached_thread(F&&) -> attached_thread<std::remove_cvref_t<F>>;
+
+static inline module::klass* get_class_from_instance(const void* instance){
+	return *static_cast<module::klass*const*>(std::assume_aligned<alignof(void*)>(instance));
+}
+
+namespace detail{
+
+template<typename T>
+struct iterate_enumerator_impl : detail::utility_operator<iterate_enumerator_impl<T>>{
+	const IEnumerable* obj;
+	constexpr explicit iterate_enumerator_impl(const IEnumerable* o) : obj{o}{}
+	class iterator{
+		void* enumerator = nullptr;
+		T (*get_current)(void*);
+		bool (*move_next)(void*);
+		iterator(void* enumerator, T (*get_current)(void*), bool (*move_next)(void*))noexcept:enumerator{enumerator}, get_current{get_current}, move_next{move_next}{
+			++*this;
+		}
+		friend iterate_enumerator_impl;
+	public:
+		using value_type = T;
+		using difference_type = std::ptrdiff_t;
+		constexpr iterator()noexcept = default;
+		constexpr iterator(const iterator&)noexcept = default;
+		constexpr iterator(iterator&&)noexcept = default;
+		iterator& operator=(const iterator&)noexcept = default;
+		iterator& operator=(iterator&&)noexcept = default;
+		value_type operator*()const{return get_current(enumerator);}
+		iterator& operator++(){
+			if(!move_next(enumerator))
+				enumerator = nullptr;
+			return *this;
+		}
+		iterator operator++(int){
+			auto it = *this;
+			++*this;
+			return it;
+		}
+		bool operator==(const iterator& rhs)const noexcept{
+			return this->enumerator == rhs.enumerator;
+		}
+		bool operator!=(const iterator& rhs)const noexcept{
+			return !(*this == rhs);
+		}
+	};
+	auto operator()(const module& il2cpp)const{
+		const auto klass = get_class_from_instance(obj);
+		const auto get_enumerator = il2cpp->*get_method<void*(const IEnumerable*)>(klass, "GetEnumerator", 0);
+		const auto enumerator = get_enumerator(obj);
+		const auto enumerator_class = get_class_from_instance(enumerator);
+		const auto get_current = il2cpp->*get_method<T(void*)>(enumerator_class, "get_Current", 0);
+		const auto move_next = il2cpp->*get_method<bool(void*)>(enumerator_class, "MoveNext", 0);
+		return std::ranges::subrange(iterator{enumerator, get_current, move_next}, iterator{});
+	}
+};
+
+}
+
+template<typename T = void*>
+static constexpr detail::iterate_enumerator_impl<T> iterate(const IEnumerable* e)noexcept{
+	return detail::iterate_enumerator_impl<T>{e};
+}
 
 }
